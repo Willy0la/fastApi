@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-class UserResponse(BaseModel):
+class UserbyIdResponse(BaseModel):
     id:int
     name:str
     age:int
-    
+
