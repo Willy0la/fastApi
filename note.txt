@@ -1,0 +1,71 @@
+What does this endpoint expect?
+
+What does it guarantee in return?
+
+What is optional vs required?
+
+What happens when input is wrong?
+
+You can explain, in words:
+
+What input an endpoint should accept
+
+What output it should return
+
+
+What a schema actually is in FastAPI
+
+A schema is a Pydantic model.
+
+Conceptually, it is:
+
+A class
+
+With typed fields
+
+That enforces structure at runtime
+
+Example mental model:
+
+schema shapes .. routers attaches the shape to the endpoint
+
+
+so pydantic enforces the contract, serialize and sanitize
+schema shapes the contract 
+
+routes is shape attached to endpoint, this. means when a request is made the endpoint response must be shaped in line with the contract in the schema created by pydantic
+
+
+from fastapi import FastAPI
+from app.routes.user import routing as userRouting
+
+app = FastAPI()
+
+@app.get("/")
+def server():
+    return{"message":"server is running"}
+
+app.include_router(userRouting)
+
+from pydantic import BaseModel
+
+class UserResponse(BaseModel):
+    id:int
+    name:str
+    
+
+    from fastapi import  APIRouter
+from app.schema.userschema import UserResponse
+from typing import List
+from fastapi import Response, status
+
+routing = APIRouter(prefix="/welcome", tags=["USERS"])
+
+@routing.get("/user", response_model=List[UserResponse])
+def greet_user():
+    return [{ "id":1, "name":"olawale",}]
+
+@routing.post("/user", response_model=UserResponse)
+def createUser():
+    status_code = status.HTTP_201_CREATED
+    return { "id":1, "name":"olawale",}
